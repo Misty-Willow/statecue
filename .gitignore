@@ -17,6 +17,7 @@ coverage/
 .vite/
 test-results/
 playwright-report/
+.playwright-cli/
 
 # Logs and local runtime state
 logs/
