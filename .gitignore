@@ -1,0 +1,53 @@
+# Local environment and secrets
+.env*
+
+# Dependencies and package-manager caches
+node_modules/
+.npm/
+.pnpm-store/
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# Build and test output
+dist/
+build/
+coverage/
+.vite/
+test-results/
+playwright-report/
+
+# Logs and local runtime state
+logs/
+*.log
+*.tmp
+*.temp
+*.pid
+*.seed
+*.local
+
+# Local databases and generated data stores
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.sqlite-shm
+*.sqlite-wal
+
+# Tooling caches
+.cache/
+.turbo/
+.parcel-cache/
+.eslintcache
+*.tsbuildinfo
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+
+# Local documentation cache
+.heroui-docs/
