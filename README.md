@@ -46,7 +46,7 @@ StateCue uses a Spec Kit style flow:
 For the web app:
 
 ```bash
-npm --prefix apps/web install
+npm --prefix apps/web ci
 npm --prefix apps/web run typecheck
 npm --prefix apps/web run build
 bash scripts/check.sh
