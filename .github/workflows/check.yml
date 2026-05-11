@@ -30,6 +30,10 @@ jobs:
         if: hashFiles('apps/web/package.json') != ''
         run: npm --prefix apps/web run typecheck
 
+      - name: Test web app
+        if: hashFiles('apps/web/package.json') != ''
+        run: npm --prefix apps/web run test
+
       - name: Build web app
         if: hashFiles('apps/web/package.json') != ''
         run: npm --prefix apps/web run build
