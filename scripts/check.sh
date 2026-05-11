@@ -166,6 +166,16 @@ for required_file in "${required_files[@]}"; do
   [[ -f "$required_file" ]] || fail "required public-foundation file is missing: $required_file"
 done
 
+spec_slice_dirs=(specs/*/)
+for spec_slice_dir in "${spec_slice_dirs[@]}"; do
+  [[ -d "$spec_slice_dir" ]] || continue
+
+  spec_slice_dir="${spec_slice_dir%/}"
+  for spec_artifact in spec.md plan.md tasks.md; do
+    [[ -f "$spec_slice_dir/$spec_artifact" ]] || fail "spec slice is missing required artifact: $spec_slice_dir/$spec_artifact"
+  done
+done
+
 banned_terms_regex='internal-only|not for public|remove before public|do not publish|confidential|private repo[:=]|personal project[:=]|old product name[:=]|legacy project[:=]|sandbox repo[:=]'
 private_users_path="/Us""ers"
 private_home_regex="(${private_users_path}/|/home/[^[:space:]/]+/|C:\\\\Us""ers\\\\|file://${private_users_path}/|~/.ssh|~/.config)"
@@ -248,6 +258,12 @@ for raw_path in "${files[@]}"; do
 
   if [[ "$path" == "scripts/check.sh" ]]; then
     continue
+  fi
+
+  if [[ "$path" == docs/* || "$path" == specs/* ]]; then
+    if grep -FIn -- "- [ ]" "$path" >/dev/null; then
+      fail "unchecked task marker found in public docs/specs: $path"
+    fi
   fi
 
   if grep -EIn -e "$banned_terms_regex" "$path" >/dev/null; then
