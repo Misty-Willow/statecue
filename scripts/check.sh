@@ -362,6 +362,8 @@ if [[ -d apps/api ]]; then
   grep -R -Fq 'DataMode:        "mock"' apps/api || fail "api responses must stay mock-scoped"
   grep -R -Eiq 'non-medical|professional advice' apps/api || fail "api must include non-medical safety language"
   grep -Fq 'EXPOSE 8080' apps/api/Dockerfile || fail "api Dockerfile must expose the default Cloud Run port"
+  grep -Fq 'USER 65532:65532' apps/api/Dockerfile || fail "api Dockerfile must run as non-root"
+  grep -Fq 'ENTRYPOINT ["/statecue-api"]' apps/api/Dockerfile || fail "api Dockerfile must run the API binary"
 fi
 
 if (( failures > 0 )); then

@@ -62,16 +62,19 @@ curl -s http://127.0.0.1:8080/api/cue
 
 Stop the local container after the smoke test.
 
-## Deployment Commands
+## Future Deployment Command Template
 
-Do not run these until the approval gate is crossed. They are placeholders for the deployment slice:
+Do not run these commands. They are a non-authorized template for a future deployment slice.
+Actual GCP API enabling, Artifact Registry creation, image push, Cloud Run deployment,
+domain setup, or billing-impacting work requires explicit human approval first.
 
 ```bash
-gcloud services enable run.googleapis.com artifactregistry.googleapis.com
-gcloud artifacts repositories create STATECUE_REPO --repository-format=docker --location=REGION
-docker build -f apps/api/Dockerfile -t REGION-docker.pkg.dev/PROJECT_ID/STATECUE_REPO/statecue-api:TAG .
-docker push REGION-docker.pkg.dev/PROJECT_ID/STATECUE_REPO/statecue-api:TAG
-gcloud run deploy statecue-api --image REGION-docker.pkg.dev/PROJECT_ID/STATECUE_REPO/statecue-api:TAG --region REGION
+# DO NOT RUN WITHOUT EXPLICIT HUMAN APPROVAL.
+# gcloud services enable run.googleapis.com artifactregistry.googleapis.com
+# gcloud artifacts repositories create STATECUE_REPO --repository-format=docker --location=REGION
+# docker build -f apps/api/Dockerfile -t REGION-docker.pkg.dev/PROJECT_ID/STATECUE_REPO/statecue-api:TAG .
+# docker push REGION-docker.pkg.dev/PROJECT_ID/STATECUE_REPO/statecue-api:TAG
+# gcloud run deploy statecue-api --image REGION-docker.pkg.dev/PROJECT_ID/STATECUE_REPO/statecue-api:TAG --region REGION
 ```
 
 ## Not Included
