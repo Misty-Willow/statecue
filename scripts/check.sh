@@ -36,6 +36,7 @@ required_files=(
   apps/web/tsconfig.node.json
   apps/web/vite.config.ts
   apps/api/README.md
+  apps/api/Dockerfile
   apps/api/go.mod
   apps/api/cmd/statecue-api/main.go
   apps/api/internal/statecue/cue.go
@@ -44,6 +45,9 @@ required_files=(
   apps/api/internal/statecue/handler_test.go
   apps/api/internal/statecue/model.go
   docs/deployment/gcp-predeploy-plan.md
+  specs/006-cloud-run-readiness/plan.md
+  specs/006-cloud-run-readiness/spec.md
+  specs/006-cloud-run-readiness/tasks.md
   specs/001-statecue-mock-direction/plan.md
   specs/001-statecue-mock-direction/spec.md
   specs/001-statecue-mock-direction/tasks.md
@@ -306,6 +310,8 @@ foundation_docs=(
   specs/003-deterministic-cue-derivation/plan.md
   specs/005-mock-go-api/spec.md
   specs/005-mock-go-api/plan.md
+  specs/006-cloud-run-readiness/spec.md
+  specs/006-cloud-run-readiness/plan.md
 )
 
 mock_boundary_docs=(
@@ -317,6 +323,7 @@ mock_boundary_docs=(
   specs/002-interactive-mock-scenarios/spec.md
   specs/003-deterministic-cue-derivation/spec.md
   specs/005-mock-go-api/spec.md
+  specs/006-cloud-run-readiness/spec.md
 )
 
 for doc in "${foundation_docs[@]}"; do
@@ -354,6 +361,7 @@ if [[ -d apps/api ]]; then
   grep -R -Fq "func DeriveDirection" apps/api || fail "api must include deterministic cue derivation"
   grep -R -Fq 'DataMode:        "mock"' apps/api || fail "api responses must stay mock-scoped"
   grep -R -Eiq 'non-medical|professional advice' apps/api || fail "api must include non-medical safety language"
+  grep -Fq 'EXPOSE 8080' apps/api/Dockerfile || fail "api Dockerfile must expose the default Cloud Run port"
 fi
 
 if (( failures > 0 )); then
