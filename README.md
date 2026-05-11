@@ -32,7 +32,7 @@ submission/ public demo assets and submission context
 
 HeroUI v3 is the baseline UI system. Charting and loading effects are allowed only when they clarify the dashboard; they are not the visual foundation.
 
-The current public foundation defines the product, repository safety checks, and first mock-direction spec. The web app and optional API are planned next slices, not implemented in this initial foundation commit.
+The current repository includes the public foundation plus the first mock web dashboard under `apps/web`. The optional API is still a future slice.
 
 ## Development Flow
 
@@ -42,6 +42,15 @@ StateCue uses a Spec Kit style flow:
 2. Keep architecture and design decisions in `docs/`.
 3. Implement the smallest mock-first vertical slice.
 4. Verify with automated checks and public-safety scans before publishing.
+
+For the web app:
+
+```bash
+npm --prefix apps/web ci
+npm --prefix apps/web run typecheck
+npm --prefix apps/web run build
+bash scripts/check.sh
+```
 
 ## Safety Boundary
 

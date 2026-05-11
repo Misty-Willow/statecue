@@ -1,6 +1,6 @@
 # Architecture Overview
 
-StateCue starts as a small mock-data product surface. The architecture should keep the demo useful while leaving a clean path to a Go API later.
+StateCue starts as a small mock-data product surface. The current app is a frontend-only React + Vite dashboard, with a clean path to a Go API later if a server slice becomes useful.
 
 ## System Shape
 

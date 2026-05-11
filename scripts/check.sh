@@ -22,6 +22,19 @@ required_files=(
   docs/plan.md
   docs/structure.md
   scripts/check.sh
+  apps/web/index.html
+  apps/web/package-lock.json
+  apps/web/package.json
+  apps/web/public/favicon.svg
+  apps/web/src/App.tsx
+  apps/web/src/components/DashboardShell.tsx
+  apps/web/src/data/statecue.ts
+  apps/web/src/main.tsx
+  apps/web/src/styles.css
+  apps/web/tsconfig.app.json
+  apps/web/tsconfig.json
+  apps/web/tsconfig.node.json
+  apps/web/vite.config.ts
   specs/001-statecue-mock-direction/plan.md
   specs/001-statecue-mock-direction/spec.md
   specs/001-statecue-mock-direction/tasks.md
@@ -53,7 +66,8 @@ is_pruned_path() {
     vendor|vendor/*|*/vendor/*|\
     tmp|tmp/*|*/tmp/*|\
     test-results|test-results/*|*/test-results/*|\
-    playwright-report|playwright-report/*|*/playwright-report/*)
+    playwright-report|playwright-report/*|*/playwright-report/*|\
+    .playwright-cli|.playwright-cli/*|*/.playwright-cli/*)
       return 0
       ;;
   esac
@@ -125,7 +139,8 @@ collect_files() {
       -o -path './vendor' \
       -o -path './tmp' \
       -o -path './test-results' \
-      -o -path './playwright-report' \) -prune \
+      -o -path './playwright-report' \
+      -o -path './.playwright-cli' \) -prune \
       -o -type f -print0
   fi
 }

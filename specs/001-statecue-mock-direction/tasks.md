@@ -9,16 +9,16 @@
 
 ## Implementation Tasks
 
-- [ ] Read local HeroUI v3 docs for components used in the first screen.
-- [ ] Create a local mock cue data module.
-- [ ] Build the StateCue first-screen experience in `apps/web`.
-- [ ] Display product name, tagline, and Japanese copy.
-- [ ] Display one active mock direction: Go, Light, Rest, or Check.
-- [ ] Display sleep, load, fatigue, and data freshness as separate signals.
-- [ ] Add rationale, confidence, mock-data label, and non-medical safety note.
-- [ ] Add responsive styling for mobile and desktop.
-- [ ] Run available checks.
-- [ ] Scan for old product names, credential-like files, private references, and medical overclaims.
+- [x] Read local HeroUI v3 docs for components used in the first screen.
+- [x] Create a local mock cue data module.
+- [x] Build the StateCue first-screen experience in `apps/web`.
+- [x] Display product name, tagline, and Japanese copy.
+- [x] Display one active mock direction: Go, Light, Rest, or Check.
+- [x] Display sleep, load, fatigue, and data freshness as separate signals.
+- [x] Add rationale, confidence, mock-data label, and non-medical safety note.
+- [x] Add responsive styling for mobile and desktop.
+- [x] Run available checks.
+- [x] Scan for old product names, credential-like files, private references, and medical overclaims.
 
 ## Out of Scope
 
@@ -27,7 +27,7 @@
 - Authentication
 - Backend persistence
 - Package installation
-- Frontend implementation in this foundation slice
+- Backend implementation
 
 ## Review Checklist
 

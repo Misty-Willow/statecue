@@ -13,3 +13,26 @@ jobs:
 
       - name: Run public-safety checks
         run: bash scripts/check.sh
+
+      - name: Setup Node
+        if: hashFiles('apps/web/package.json') != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+
+      - name: Install web dependencies
+        if: hashFiles('apps/web/package.json') != ''
+        run: npm --prefix apps/web ci
+
+      - name: Typecheck web app
+        if: hashFiles('apps/web/package.json') != ''
+        run: npm --prefix apps/web run typecheck
+
+      - name: Build web app
+        if: hashFiles('apps/web/package.json') != ''
+        run: npm --prefix apps/web run build
+
+      - name: Re-run public-safety checks
+        run: bash scripts/check.sh

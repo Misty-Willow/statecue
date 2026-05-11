@@ -19,7 +19,7 @@ This foundation covers documentation, specification, and public repository safet
 - Implementation task outline for the first demo slice
 - Public-safety scan script and initial GitHub Actions check
 
-No frontend implementation, backend implementation, package installation, real data integration, or deployment setup is part of this slice. Repository initialization is allowed only after the public-safety scan passes.
+The first web implementation lives in `apps/web` as a deterministic mock dashboard. Backend implementation, real data integration, and deployment setup remain outside this slice.
 
 ## Product Boundary
 
