@@ -13,6 +13,8 @@ statecue/
     structure.md
     architecture/
       overview.md
+    deployment/
+      gcp-predeploy-plan.md
   specs/
     001-statecue-mock-direction/
       spec.md
@@ -30,6 +32,10 @@ statecue/
       spec.md
       plan.md
       tasks.md
+    005-mock-go-api/
+      spec.md
+      plan.md
+      tasks.md
   apps/
     web/
     api/
@@ -41,12 +47,14 @@ statecue/
 - `docs/plan.md`: public foundation plan and milestone boundary.
 - `docs/structure.md`: repository map and contribution expectations.
 - `docs/architecture/overview.md`: high-level system shape and data boundary.
+- `docs/deployment/gcp-predeploy-plan.md`: approval-gated GCP planning without deployment commands.
 - `specs/001-statecue-mock-direction/`: first demo feature definition.
 - `specs/002-interactive-mock-scenarios/`: deterministic scenario switching feature definition.
 - `specs/003-deterministic-cue-derivation/`: mock cue derivation and signal severity feature definition.
 - `specs/004-decision-surface-polish/`: compact cue logic reference and dashboard polish feature definition.
+- `specs/005-mock-go-api/`: local Go API feature definition.
 - `apps/web`: current React + Vite + HeroUI v3 mock dashboard implementation.
-- `apps/api`: reserved for a future Go API implementation when a server slice is explicitly selected.
+- `apps/api`: current local Go API for deterministic mock cue responses.
 
 ## Public Boundary Rules
 

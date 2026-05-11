@@ -1,6 +1,6 @@
 # Architecture Overview
 
-StateCue starts as a small mock-data product surface. The current app is a frontend-only React + Vite dashboard, with a clean path to a Go API later if a server slice becomes useful.
+StateCue starts as a small mock-data product surface. The current app includes a React + Vite dashboard and a local Go API that serves deterministic mock cue responses.
 
 ## System Shape
 
@@ -13,8 +13,6 @@ React + Vite web app
       v
 HeroUI v3 experience
 ```
-
-Future server slice:
 
 ```text
 Mock/demo cue contract
@@ -40,7 +38,7 @@ HeroUI v3 is the UI baseline. Components should be selected from local docs befo
 
 ## API
 
-A Go API is optional for the first foundation. When added, it should expose a small mock cue response rather than connecting to external platforms.
+The Go API exposes small mock cue responses rather than connecting to external platforms.
 
 Candidate response shape:
 
@@ -59,6 +57,15 @@ Candidate response shape:
   "dataMode": "mock"
 }
 ```
+
+Current local endpoints:
+
+- `GET /healthz`
+- `GET /api/cue`
+- `GET /api/cue?scenario=go|light|rest|check`
+- `GET /api/scenarios`
+
+The API listens on `PORT` when provided and defaults to `8080` locally. Deployment remains outside the current slice.
 
 ## Data Boundary
 
