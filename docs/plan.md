@@ -19,7 +19,7 @@ This foundation covers documentation, specification, and public repository safet
 - Implementation task outline for the first demo slice
 - Public-safety scan script and initial GitHub Actions check
 
-The web implementation lives in `apps/web` as a deterministic mock dashboard with interactive mock scenarios and cue derivation rules. Backend implementation, real data integration, and deployment setup remain outside this slice.
+The web implementation lives in `apps/web` as a deterministic mock dashboard with interactive mock scenarios, cue derivation rules, and a compact cue logic reference. Backend implementation, real data integration, and deployment setup remain outside this slice.
 
 ## Product Boundary
 

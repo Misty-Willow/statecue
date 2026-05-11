@@ -44,6 +44,9 @@ required_files=(
   specs/003-deterministic-cue-derivation/plan.md
   specs/003-deterministic-cue-derivation/spec.md
   specs/003-deterministic-cue-derivation/tasks.md
+  specs/004-decision-surface-polish/plan.md
+  specs/004-decision-surface-polish/spec.md
+  specs/004-decision-surface-polish/tasks.md
 )
 
 is_git_repo() {

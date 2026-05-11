@@ -32,6 +32,14 @@ Before changing product behavior, UI, architecture, or verification rules, read 
 - Keep this repository independent and public-facing from the first line of history.
 - Refuse destructive commands unless the user explicitly requests them.
 
+## Autonomy And Approval Gates
+
+- Work in guarded autonomy for repository-local implementation, verification, commits, pushes, PR creation, PR readiness, and PR merge when scope boundaries are satisfied.
+- Do not stop for separate approval on normal repo workflow steps if checks are green, the branch is cleanly scoped, and P0/P1 self-review is clear.
+- A rubber-duck PR review is acceptable when it includes the latest diff, verification evidence, and an explicit P0/P1/P2/P3 self-review.
+- Require explicit user approval before any GCP deployment, cloud resource creation, paid service activation, billing-impacting change, production deployment, or public external service integration.
+- Do not add backend/API/auth/integrations/deployments unless that slice is explicitly selected.
+
 ## Implementation Guidance
 
 - The first product slice is frontend-only under `apps/web`.
