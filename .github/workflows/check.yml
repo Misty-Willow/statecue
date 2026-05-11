@@ -57,3 +57,24 @@ jobs:
         if: hashFiles('apps/api/go.mod') != ''
         working-directory: apps/api
         run: go build -o /tmp/statecue-api ./cmd/statecue-api
+
+      - name: Build API container
+        if: hashFiles('apps/api/Dockerfile') != ''
+        run: docker build -f apps/api/Dockerfile -t statecue-api:ci .
+
+      - name: Smoke API container
+        if: hashFiles('apps/api/Dockerfile') != ''
+        run: |
+          container_id="$(docker run -d -p 127.0.0.1:18080:8080 -e PORT=8080 statecue-api:ci)"
+          trap 'docker rm -f "$container_id" >/dev/null' EXIT
+          for attempt in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:18080/healthz >/tmp/statecue-api-health.json; then
+              cat /tmp/statecue-api-health.json
+              curl -fsS http://127.0.0.1:18080/api/cue >/tmp/statecue-api-cue.json
+              grep -F '"direction":"light"' /tmp/statecue-api-cue.json
+              exit 0
+            fi
+            sleep 1
+          done
+          docker logs "$container_id"
+          exit 1
