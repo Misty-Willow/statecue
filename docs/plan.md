@@ -19,7 +19,7 @@ This foundation covers documentation, specification, and public repository safet
 - Implementation task outline for the first demo slice
 - Public-safety scan script and initial GitHub Actions check
 
-The first web implementation lives in `apps/web` as a deterministic mock dashboard. Backend implementation, real data integration, and deployment setup remain outside this slice.
+The web implementation lives in `apps/web` as a deterministic mock dashboard with interactive mock scenarios. Backend implementation, real data integration, and deployment setup remain outside this slice.
 
 ## Product Boundary
 
@@ -46,4 +46,4 @@ The first demo should show:
 
 ## Later Work
 
-Future slices may add a mock API, interactive scenario switching, persistence-free demo sessions, and optional data-connection planning. Anything beyond mock/demo data remains out of scope until explicitly approved and documented.
+Future slices may add a mock API, richer deterministic scenario logic, persistence-free demo sessions, and optional data-connection planning. Anything beyond mock/demo data remains out of scope until explicitly approved and documented.

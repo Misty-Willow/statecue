@@ -38,6 +38,9 @@ required_files=(
   specs/001-statecue-mock-direction/plan.md
   specs/001-statecue-mock-direction/spec.md
   specs/001-statecue-mock-direction/tasks.md
+  specs/002-interactive-mock-scenarios/plan.md
+  specs/002-interactive-mock-scenarios/spec.md
+  specs/002-interactive-mock-scenarios/tasks.md
 )
 
 is_git_repo() {
@@ -266,6 +269,8 @@ foundation_docs=(
   docs/architecture/overview.md
   specs/001-statecue-mock-direction/spec.md
   specs/001-statecue-mock-direction/plan.md
+  specs/002-interactive-mock-scenarios/spec.md
+  specs/002-interactive-mock-scenarios/plan.md
 )
 
 mock_boundary_docs=(
@@ -274,6 +279,7 @@ mock_boundary_docs=(
   docs/plan.md
   docs/architecture/overview.md
   specs/001-statecue-mock-direction/spec.md
+  specs/002-interactive-mock-scenarios/spec.md
 )
 
 for doc in "${foundation_docs[@]}"; do
@@ -292,6 +298,18 @@ for doc in "${mock_boundary_docs[@]}"; do
   grep -Eiq 'mock|demo data' "$doc" || fail "mock/demo data boundary is missing from: $doc"
   grep -Eiq 'non-medical|not a medical|professional advice' "$doc" || fail "non-medical safety boundary is missing from: $doc"
 done
+
+if [[ "$(sed -n '1p' apps/web/src/styles.css)" != '@import "tailwindcss";' ]]; then
+  fail "apps/web/src/styles.css must import tailwindcss first"
+fi
+
+if [[ "$(sed -n '2p' apps/web/src/styles.css)" != '@import "@heroui/styles";' ]]; then
+  fail "apps/web/src/styles.css must import @heroui/styles second"
+fi
+
+grep -R -Fq "今日の状態から、進む合図を。" apps/web/src || fail "web app must show the Japanese copy"
+grep -R -Eiq 'mock|demo' apps/web/src || fail "web app must show mock/demo boundary language"
+grep -R -Eiq 'non-medical|professional advice' apps/web/src || fail "web app must show non-medical safety language"
 
 if (( failures > 0 )); then
   exit 1

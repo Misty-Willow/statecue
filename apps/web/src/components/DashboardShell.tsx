@@ -1,8 +1,9 @@
-import { Alert, Card, Chip, Meter, Label } from "@heroui/react";
+import { useState } from "react";
+import { Alert, Card, Chip, Label, Meter, Tabs } from "@heroui/react";
 import {
   directionCopy,
-  scenarioPreviews,
   signalColor,
+  stateCueScenarios,
   todayCue,
   type Direction,
   type SignalSummary,
@@ -55,7 +56,10 @@ function SignalCard({ signal }: { signal: SignalSummary }) {
 }
 
 export function DashboardShell() {
-  const direction = directionCopy[todayCue.direction];
+  const [selectedDirection, setSelectedDirection] = useState<Direction>(todayCue.direction);
+  const activeCue =
+    stateCueScenarios.find((scenario) => scenario.direction === selectedDirection) ?? todayCue;
+  const direction = directionCopy[activeCue.direction];
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -77,10 +81,37 @@ export function DashboardShell() {
             <p className="mt-3 text-lg text-muted">今日の状態から、進む合図を。</p>
           </div>
           <div className="rounded-lg border border-border bg-surface px-4 py-3 text-sm text-muted">
-            <span className="block font-medium text-foreground">{todayCue.dateLabel}</span>
+            <span className="block font-medium text-foreground">{activeCue.dateLabel}</span>
             Non-medical demo cue. Mock signals only. No real health data.
           </div>
         </header>
+
+        <section className="rounded-lg border border-border bg-surface/80 p-3" aria-label="Mock scenario selector">
+          <Tabs
+            className="w-full"
+            selectedKey={activeCue.direction}
+            onSelectionChange={(key) => setSelectedDirection(key as Direction)}
+          >
+            <Tabs.ListContainer>
+              <Tabs.List
+                aria-label="Choose a deterministic mock scenario"
+                className="w-full flex-wrap *:min-h-10 *:flex-1 *:px-4 *:text-sm *:font-medium"
+              >
+                {stateCueScenarios.map((scenario) => (
+                  <Tabs.Tab id={scenario.direction} key={scenario.direction}>
+                    {directionCopy[scenario.direction].label}
+                    <Tabs.Indicator />
+                  </Tabs.Tab>
+                ))}
+              </Tabs.List>
+            </Tabs.ListContainer>
+            {stateCueScenarios.map((scenario) => (
+              <Tabs.Panel className="px-1 pt-3 text-sm text-muted" id={scenario.direction} key={scenario.direction}>
+                {scenario.scenarioSummary}
+              </Tabs.Panel>
+            ))}
+          </Tabs>
+        </section>
 
         <section className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
           <Card className="border border-border bg-surface shadow-sm" role="region" aria-labelledby="today-cue-title">
@@ -89,15 +120,18 @@ export function DashboardShell() {
                 <div>
                   <Card.Description>Today's cue</Card.Description>
                   <Card.Title id="today-cue-title" className="mt-1 text-4xl sm:text-5xl">
-                    {todayCue.title}
+                    {activeCue.title}
                   </Card.Title>
                 </div>
-                <DirectionChip direction={todayCue.direction} />
+                <DirectionChip direction={activeCue.direction} />
               </div>
             </Card.Header>
             <Card.Content>
-              <p className="max-w-2xl text-xl text-foreground">{todayCue.subtitle}</p>
+              <p className="max-w-2xl text-xl text-foreground">{activeCue.subtitle}</p>
               <p className="mt-3 text-muted">{direction.description}</p>
+              <p className="mt-5 rounded-md border border-border bg-background/70 px-4 py-3 text-sm font-medium text-foreground">
+                {activeCue.primarySignal}
+              </p>
 
               <div className="mt-8">
                 <Meter
@@ -106,12 +140,12 @@ export function DashboardShell() {
                   maxValue={100}
                   minValue={0}
                   size="lg"
-                  value={todayCue.clarityScore}
-                  valueLabel={`${todayCue.clarityScore}/100`}
+                  value={activeCue.clarityScore}
+                  valueLabel={`${activeCue.clarityScore}/100`}
                 >
                   <div className="mb-3 flex items-center justify-between gap-3">
                     <Label className="text-sm font-medium text-foreground">
-                      Cue clarity: {todayCue.confidence}
+                      Cue clarity: {activeCue.confidence}
                     </Label>
                     <Meter.Output className="text-sm text-muted" />
                   </div>
@@ -122,7 +156,7 @@ export function DashboardShell() {
               </div>
             </Card.Content>
             <Card.Footer>
-              <p className="text-sm text-muted">Canonical state: {todayCue.direction}</p>
+              <p className="text-sm text-muted">Canonical state: {activeCue.direction}</p>
             </Card.Footer>
           </Card>
 
@@ -133,7 +167,7 @@ export function DashboardShell() {
             </Card.Header>
             <Card.Content>
               <ol className="space-y-4">
-                {todayCue.rationale.map((item) => (
+                {activeCue.rationale.map((item) => (
                   <li className="rounded-md border border-border bg-background/70 p-4 text-sm text-foreground" key={item}>
                     {item}
                   </li>
@@ -144,7 +178,7 @@ export function DashboardShell() {
         </section>
 
         <section aria-label="Signal summaries" className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {todayCue.signals.map((signal) => (
+          {activeCue.signals.map((signal) => (
             <SignalCard key={signal.name} signal={signal} />
           ))}
         </section>
@@ -154,7 +188,7 @@ export function DashboardShell() {
             <Alert.Indicator />
             <Alert.Content>
               <Alert.Title>Mock data boundary</Alert.Title>
-              <Alert.Description>{todayCue.safetyNote}</Alert.Description>
+              <Alert.Description>{activeCue.safetyNote}</Alert.Description>
             </Alert.Content>
           </Alert>
 
@@ -164,14 +198,17 @@ export function DashboardShell() {
               <Card.Description>How the same model should shift when mock signals change.</Card.Description>
             </Card.Header>
             <Card.Content>
-              <div className="grid gap-3 sm:grid-cols-3">
-                {scenarioPreviews.map((scenario) => (
-                  <article className="rounded-md border border-border bg-background/70 p-4" key={scenario.label}>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {stateCueScenarios.map((scenario) => (
+                  <article
+                    className="rounded-md border border-border bg-background/70 p-4"
+                    key={scenario.direction}
+                  >
                     <div className="flex items-center justify-between gap-2">
-                      <h3 className="text-sm font-semibold">{scenario.label}</h3>
+                      <h3 className="text-sm font-semibold">{scenario.title}</h3>
                       <DirectionChip direction={scenario.direction} />
                     </div>
-                    <p className="mt-3 text-sm text-muted">{scenario.summary}</p>
+                    <p className="mt-3 text-sm text-muted">{scenario.scenarioSummary}</p>
                   </article>
                 ))}
               </div>
