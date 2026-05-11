@@ -65,13 +65,15 @@ jobs:
       - name: Smoke API container
         if: hashFiles('apps/api/Dockerfile') != ''
         run: |
-          container_id="$(docker run -d -p 127.0.0.1:18080:8080 -e PORT=8080 statecue-api:ci)"
+          container_id="$(docker run -d -p 127.0.0.1:18080:9090 -e PORT=9090 statecue-api:ci)"
           trap 'docker rm -f "$container_id" >/dev/null' EXIT
           for attempt in $(seq 1 20); do
             if curl -fsS http://127.0.0.1:18080/healthz >/tmp/statecue-api-health.json; then
               cat /tmp/statecue-api-health.json
               curl -fsS http://127.0.0.1:18080/api/cue >/tmp/statecue-api-cue.json
               grep -F '"direction":"light"' /tmp/statecue-api-cue.json
+              curl -fsS http://127.0.0.1:18080/api/scenarios >/tmp/statecue-api-scenarios.json
+              grep -F '"direction":"check"' /tmp/statecue-api-scenarios.json
               exit 0
             fi
             sleep 1
