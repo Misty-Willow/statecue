@@ -41,6 +41,9 @@ required_files=(
   specs/002-interactive-mock-scenarios/plan.md
   specs/002-interactive-mock-scenarios/spec.md
   specs/002-interactive-mock-scenarios/tasks.md
+  specs/003-deterministic-cue-derivation/plan.md
+  specs/003-deterministic-cue-derivation/spec.md
+  specs/003-deterministic-cue-derivation/tasks.md
 )
 
 is_git_repo() {
@@ -271,6 +274,8 @@ foundation_docs=(
   specs/001-statecue-mock-direction/plan.md
   specs/002-interactive-mock-scenarios/spec.md
   specs/002-interactive-mock-scenarios/plan.md
+  specs/003-deterministic-cue-derivation/spec.md
+  specs/003-deterministic-cue-derivation/plan.md
 )
 
 mock_boundary_docs=(
@@ -280,6 +285,7 @@ mock_boundary_docs=(
   docs/architecture/overview.md
   specs/001-statecue-mock-direction/spec.md
   specs/002-interactive-mock-scenarios/spec.md
+  specs/003-deterministic-cue-derivation/spec.md
 )
 
 for doc in "${foundation_docs[@]}"; do
@@ -310,6 +316,8 @@ fi
 grep -R -Fq "今日の状態から、進む合図を。" apps/web/src || fail "web app must show the Japanese copy"
 grep -R -Eiq 'mock|demo' apps/web/src || fail "web app must show mock/demo boundary language"
 grep -R -Eiq 'non-medical|professional advice' apps/web/src || fail "web app must show non-medical safety language"
+grep -R -Fq "function deriveDirection" apps/web/src || fail "web app must include deterministic cue derivation"
+grep -R -Fq "SignalSeverity" apps/web/src || fail "web app must separate raw signal state from visual severity"
 
 if (( failures > 0 )); then
   exit 1

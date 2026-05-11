@@ -22,6 +22,10 @@ statecue/
       spec.md
       plan.md
       tasks.md
+    003-deterministic-cue-derivation/
+      spec.md
+      plan.md
+      tasks.md
   apps/
     web/
     api/
@@ -35,6 +39,7 @@ statecue/
 - `docs/architecture/overview.md`: high-level system shape and data boundary.
 - `specs/001-statecue-mock-direction/`: first demo feature definition.
 - `specs/002-interactive-mock-scenarios/`: deterministic scenario switching feature definition.
+- `specs/003-deterministic-cue-derivation/`: mock cue derivation and signal severity feature definition.
 - `apps/web`: current React + Vite + HeroUI v3 mock dashboard implementation.
 - `apps/api`: reserved for a future Go API implementation when a server slice is explicitly selected.
 
