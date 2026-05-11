@@ -78,7 +78,7 @@ export function DashboardShell() {
           </div>
           <div className="rounded-lg border border-border bg-surface px-4 py-3 text-sm text-muted">
             <span className="block font-medium text-foreground">{todayCue.dateLabel}</span>
-            Demo signals only. No real health data.
+            Non-medical demo cue. Mock signals only. No real health data.
           </div>
         </header>
 
