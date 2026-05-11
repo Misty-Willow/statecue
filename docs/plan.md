@@ -19,7 +19,7 @@ This foundation covers documentation, specification, and public repository safet
 - Implementation task outline for the first demo slice
 - Public-safety scan script and initial GitHub Actions check
 
-The web implementation lives in `apps/web` as a deterministic mock dashboard with interactive mock scenarios, cue derivation rules, and a compact cue logic reference. Backend implementation, real data integration, and deployment setup remain outside this slice.
+The web implementation lives in `apps/web` as a deterministic mock dashboard with interactive mock scenarios, cue derivation rules, and a compact cue logic reference. The first server slice lives in `apps/api` as a local Go API for the same deterministic mock cue contract. Real data integration and deployment setup remain outside this slice.
 
 ## Product Boundary
 
@@ -46,4 +46,4 @@ The first demo should show:
 
 ## Later Work
 
-Future slices may add a mock API, richer cue explanation, persistence-free demo sessions, and optional data-connection planning. Anything beyond mock/demo data remains out of scope until explicitly approved and documented.
+Future slices may add richer cue explanation, frontend-to-API integration, persistence-free demo sessions, and optional data-connection planning. Anything beyond mock/demo data remains out of scope until explicitly approved and documented.

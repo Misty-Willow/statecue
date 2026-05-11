@@ -40,3 +40,20 @@ jobs:
 
       - name: Re-run public-safety checks
         run: bash scripts/check.sh
+
+      - name: Setup Go
+        if: hashFiles('apps/api/go.mod') != ''
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: apps/api/go.mod
+          cache-dependency-path: apps/api/go.mod
+
+      - name: Test API
+        if: hashFiles('apps/api/go.mod') != ''
+        working-directory: apps/api
+        run: go test ./...
+
+      - name: Build API
+        if: hashFiles('apps/api/go.mod') != ''
+        working-directory: apps/api
+        run: go build -o /tmp/statecue-api ./cmd/statecue-api

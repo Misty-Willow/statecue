@@ -35,6 +35,15 @@ required_files=(
   apps/web/tsconfig.json
   apps/web/tsconfig.node.json
   apps/web/vite.config.ts
+  apps/api/README.md
+  apps/api/go.mod
+  apps/api/cmd/statecue-api/main.go
+  apps/api/internal/statecue/cue.go
+  apps/api/internal/statecue/cue_test.go
+  apps/api/internal/statecue/handler.go
+  apps/api/internal/statecue/handler_test.go
+  apps/api/internal/statecue/model.go
+  docs/deployment/gcp-predeploy-plan.md
   specs/001-statecue-mock-direction/plan.md
   specs/001-statecue-mock-direction/spec.md
   specs/001-statecue-mock-direction/tasks.md
@@ -295,6 +304,8 @@ foundation_docs=(
   specs/002-interactive-mock-scenarios/plan.md
   specs/003-deterministic-cue-derivation/spec.md
   specs/003-deterministic-cue-derivation/plan.md
+  specs/005-mock-go-api/spec.md
+  specs/005-mock-go-api/plan.md
 )
 
 mock_boundary_docs=(
@@ -305,6 +316,7 @@ mock_boundary_docs=(
   specs/001-statecue-mock-direction/spec.md
   specs/002-interactive-mock-scenarios/spec.md
   specs/003-deterministic-cue-derivation/spec.md
+  specs/005-mock-go-api/spec.md
 )
 
 for doc in "${foundation_docs[@]}"; do
@@ -337,6 +349,12 @@ grep -R -Eiq 'mock|demo' apps/web/src || fail "web app must show mock/demo bound
 grep -R -Eiq 'non-medical|professional advice' apps/web/src || fail "web app must show non-medical safety language"
 grep -R -Fq "function deriveDirection" apps/web/src || fail "web app must include deterministic cue derivation"
 grep -R -Fq "SignalSeverity" apps/web/src || fail "web app must separate raw signal state from visual severity"
+
+if [[ -d apps/api ]]; then
+  grep -R -Fq "func DeriveDirection" apps/api || fail "api must include deterministic cue derivation"
+  grep -R -Fq 'DataMode:        "mock"' apps/api || fail "api responses must stay mock-scoped"
+  grep -R -Eiq 'non-medical|professional advice' apps/api || fail "api must include non-medical safety language"
+fi
 
 if (( failures > 0 )); then
   exit 1

@@ -32,7 +32,7 @@ submission/ public demo assets and submission context
 
 HeroUI v3 is the baseline UI system. Charting and loading effects are allowed only when they clarify the dashboard; they are not the visual foundation.
 
-The current repository includes the public foundation plus the first mock web dashboard under `apps/web`. The optional API is still a future slice.
+The current repository includes the public foundation, the mock web dashboard under `apps/web`, and a local mock Go API under `apps/api`.
 
 ## Development Flow
 
@@ -47,10 +47,21 @@ For the web app:
 
 ```bash
 npm --prefix apps/web ci
+npm --prefix apps/web run test
 npm --prefix apps/web run typecheck
 npm --prefix apps/web run build
 bash scripts/check.sh
 ```
+
+For the API:
+
+```bash
+cd apps/api
+go test ./...
+go run ./cmd/statecue-api
+```
+
+The API serves deterministic mock responses at `GET /healthz`, `GET /api/cue`, and `GET /api/scenarios`.
 
 ## Safety Boundary
 
