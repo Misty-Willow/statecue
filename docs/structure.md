@@ -15,6 +15,7 @@ statecue/
       overview.md
     deployment/
       gcp-predeploy-plan.md
+      gcp-staging.md
   specs/
     001-statecue-mock-direction/
       spec.md
@@ -47,7 +48,8 @@ statecue/
 - `docs/plan.md`: public foundation plan and milestone boundary.
 - `docs/structure.md`: repository map and contribution expectations.
 - `docs/architecture/overview.md`: high-level system shape and data boundary.
-- `docs/deployment/gcp-predeploy-plan.md`: approval-gated GCP planning without deployment commands.
+- `docs/deployment/gcp-predeploy-plan.md`: historical approval-gated GCP planning notes.
+- `docs/deployment/gcp-staging.md`: current GCP staging inventory, cost posture, IAM review, and verification notes.
 - `specs/001-statecue-mock-direction/`: first demo feature definition.
 - `specs/002-interactive-mock-scenarios/`: deterministic scenario switching feature definition.
 - `specs/003-deterministic-cue-derivation/`: mock cue derivation and signal severity feature definition.

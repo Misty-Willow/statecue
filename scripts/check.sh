@@ -45,6 +45,7 @@ required_files=(
   apps/api/internal/statecue/handler_test.go
   apps/api/internal/statecue/model.go
   docs/deployment/gcp-predeploy-plan.md
+  docs/deployment/gcp-staging.md
   specs/006-cloud-run-readiness/plan.md
   specs/006-cloud-run-readiness/spec.md
   specs/006-cloud-run-readiness/tasks.md
