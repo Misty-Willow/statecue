@@ -31,9 +31,9 @@
 
 ## Review Checklist
 
-- [ ] Uses StateCue naming only.
-- [ ] Uses mock/demo data language only.
-- [ ] Does not include credentials or private user records.
-- [ ] Does not imply medical diagnosis or treatment.
-- [ ] Keeps public copy concise and polished.
-- [ ] Does not mention unrelated project history or internal planning context.
+- [x] Uses StateCue naming only.
+- [x] Uses mock/demo data language only.
+- [x] Does not include credentials or private user records.
+- [x] Does not imply medical diagnosis or treatment.
+- [x] Keeps public copy concise and polished.
+- [x] Does not mention unrelated project history or internal planning context.
