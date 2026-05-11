@@ -39,6 +39,12 @@ export type StateCueSnapshot = {
   dataMode: "mock";
 };
 
+export type CueLogicReference = {
+  direction: Direction;
+  logicLabel: string;
+  logicSummary: string;
+};
+
 type DirectionContent = {
   title: string;
   subtitle: string;
@@ -400,6 +406,29 @@ const scenarioDefinitions: ScenarioDefinition[] = [
 export const stateCueScenarios: StateCueSnapshot[] = scenarioDefinitions.map(createStateCueSnapshot);
 
 export const todayCue = stateCueScenarios.find((scenario) => scenario.direction === "light") ?? stateCueScenarios[0];
+
+export const cueLogicReference: CueLogicReference[] = [
+  {
+    direction: "go",
+    logicLabel: "Aligned support",
+    logicSummary: "Fresh mock data with no rest or light limiter keeps the cue at normal effort.",
+  },
+  {
+    direction: "light",
+    logicLabel: "One limiter",
+    logicSummary: "Current data can still point lighter when fatigue or load becomes the limiting signal.",
+  },
+  {
+    direction: "rest",
+    logicLabel: "Recovery bias",
+    logicSummary: "Low sleep and elevated fatigue align around a lower-demand reflection cue.",
+  },
+  {
+    direction: "check",
+    logicLabel: "Signal quality issue",
+    logicSummary: "Stale or missing freshness moves the output to check before a stronger direction is shown.",
+  },
+];
 
 export function signalColor(signal: SignalSummary): "success" | "accent" | "warning" | "danger" {
   if (signal.severity === "support") {

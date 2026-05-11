@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Alert, Card, Chip, Label, Meter, Tabs } from "@heroui/react";
 import {
+  cueLogicReference,
   directionCopy,
   isDirection,
   signalColor,
@@ -197,23 +198,23 @@ export function DashboardShell() {
             </Alert.Content>
           </Alert>
 
-          <Card className="border border-border bg-surface" role="region" aria-labelledby="scenario-title">
+          <Card className="border border-border bg-surface" role="region" aria-labelledby="logic-title">
             <Card.Header>
-              <Card.Title id="scenario-title">Scenario contrast</Card.Title>
-              <Card.Description>How the same model should shift when mock signals change.</Card.Description>
+              <Card.Title id="logic-title">Cue logic reference</Card.Title>
+              <Card.Description>Compact rules behind the deterministic mock cue.</Card.Description>
             </Card.Header>
             <Card.Content>
               <div className="grid gap-3 sm:grid-cols-2">
-                {stateCueScenarios.map((scenario) => (
+                {cueLogicReference.map((item) => (
                   <article
                     className="rounded-md border border-border bg-background/70 p-4"
-                    key={scenario.direction}
+                    key={item.direction}
                   >
                     <div className="flex items-center justify-between gap-2">
-                      <h3 className="text-sm font-semibold">{scenario.title}</h3>
-                      <DirectionChip direction={scenario.direction} />
+                      <h3 className="text-sm font-semibold">{item.logicLabel}</h3>
+                      <DirectionChip direction={item.direction} />
                     </div>
-                    <p className="mt-3 text-sm text-muted">{scenario.scenarioSummary}</p>
+                    <p className="mt-3 text-sm text-muted">{item.logicSummary}</p>
                   </article>
                 ))}
               </div>
