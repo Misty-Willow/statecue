@@ -1,10 +1,12 @@
 # GCP Pre-Deployment Plan
 
-This plan describes how StateCue can prepare for GCP without creating cloud resources or causing billing.
+This plan describes how StateCue prepared for GCP before the first staging deployment.
+
+The current staging deployment is recorded in `docs/deployment/gcp-staging.md`.
 
 ## Current Decision
 
-Do not deploy yet. The repository now has a local web app, a local mock Go API, and a containerized API artifact, but GCP deployment remains behind explicit user approval.
+The first staging deployment crossed the approval gate and created a mock API service in `statecue-staging`. Further production deployment, public access, custom domains, real data, auth expansion, or billing-impacting changes remain behind explicit user approval.
 
 ## Candidate Shape
 
@@ -62,11 +64,9 @@ curl -s http://127.0.0.1:8080/api/cue
 
 Stop the local container after the smoke test.
 
-## Future Deployment Command Template
+## Historical Deployment Command Template
 
-Do not run these commands. They are a non-authorized template for a future deployment slice.
-Actual GCP API enabling, Artifact Registry creation, image push, Cloud Run deployment,
-domain setup, or billing-impacting work requires explicit human approval first.
+Do not run these commands from this historical plan. Future GCP API enabling, Artifact Registry creation, image push, Cloud Run deployment, domain setup, or billing-impacting work requires explicit human approval first.
 
 ```bash
 # DO NOT RUN WITHOUT EXPLICIT HUMAN APPROVAL.
@@ -84,4 +84,4 @@ domain setup, or billing-impacting work requires explicit human approval first.
 - GitHub Actions deployment workflow.
 - Secret management setup.
 
-Those belong in a deployment slice after the approval gate is crossed.
+Those belong in future deployment slices after the relevant approval gate is crossed.
