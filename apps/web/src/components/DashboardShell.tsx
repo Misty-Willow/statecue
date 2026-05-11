@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Alert, Card, Chip, Label, Meter, Tabs } from "@heroui/react";
 import {
   directionCopy,
+  isDirection,
   signalColor,
   stateCueScenarios,
   todayCue,
@@ -90,7 +91,11 @@ export function DashboardShell() {
           <Tabs
             className="w-full"
             selectedKey={activeCue.direction}
-            onSelectionChange={(key) => setSelectedDirection(key as Direction)}
+            onSelectionChange={(key) => {
+              if (isDirection(key)) {
+                setSelectedDirection(key);
+              }
+            }}
           >
             <Tabs.ListContainer>
               <Tabs.List
