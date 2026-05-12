@@ -53,6 +53,14 @@ npm --prefix apps/web run build
 bash scripts/check.sh
 ```
 
+The web app can optionally read mock cues from an API:
+
+```bash
+VITE_STATECUE_API_BASE_URL=http://127.0.0.1:8080 npm --prefix apps/web run dev
+```
+
+If the API URL is unset or unavailable, the dashboard keeps using the deterministic local mock data. The deployed staging API is authenticated, so a browser build pointed at that URL will safely fall back unless the access policy changes.
+
 For the API:
 
 ```bash

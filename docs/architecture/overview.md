@@ -36,6 +36,8 @@ The web app should own the first demo experience:
 
 HeroUI v3 is the UI baseline. Components should be selected from local docs before implementation.
 
+The frontend can optionally fetch the mock cue contract from `VITE_STATECUE_API_BASE_URL`. If that variable is unset, the API is unavailable, or the response does not match the mock cue contract, the app falls back to the deterministic local mock snapshots. This keeps the first screen useful without requiring accounts, credentials, persistence, or live integrations.
+
 ## API
 
 The Go API exposes small mock cue responses rather than connecting to external platforms.
@@ -66,6 +68,8 @@ Current local endpoints:
 - `GET /api/scenarios`
 
 The API listens on `PORT` when provided and defaults to `8080` locally. Deployment remains outside the current slice.
+
+The current staging API is authenticated on Cloud Run. It is useful for deployment verification and future integration work, but it is not a public browser API unless a later approval explicitly changes that access boundary.
 
 ## Data Boundary
 
