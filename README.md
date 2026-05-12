@@ -61,6 +61,15 @@ VITE_STATECUE_API_BASE_URL=http://127.0.0.1:8080 npm --prefix apps/web run dev
 
 If the API URL is unset or unavailable, the dashboard keeps using the deterministic local mock data. The deployed staging API is authenticated, so a browser build pointed at that URL will safely fall back unless the access policy changes.
 
+The staging web dashboard is deployed with Firebase Hosting:
+
+```bash
+npm --prefix apps/web run build
+npx -y firebase-tools@latest deploy --only hosting --project statecue-staging
+```
+
+Current staging URL: <https://statecue-staging.web.app>
+
 For the API:
 
 ```bash

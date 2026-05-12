@@ -12,6 +12,8 @@ fail() {
 }
 
 required_files=(
+  .dockerignore
+  .firebaserc
   .github/workflows/check.yml
   .gitignore
   AGENTS.md
@@ -21,6 +23,7 @@ required_files=(
   docs/architecture/overview.md
   docs/plan.md
   docs/structure.md
+  firebase.json
   scripts/check-gcp-staging.sh
   scripts/check.sh
   apps/web/index.html
