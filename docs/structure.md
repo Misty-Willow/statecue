@@ -22,6 +22,8 @@ statecue/
       gcp-predeploy-plan.md
       gcp-staging.md
       public-staging.md
+    source-materials/
+      README.md
   specs/
     001-statecue-mock-direction/
       spec.md
@@ -43,6 +45,14 @@ statecue/
       spec.md
       plan.md
       tasks.md
+    006-cloud-run-readiness/
+      spec.md
+      plan.md
+      tasks.md
+    007-running-plan-agent-v1/
+      spec.md
+      plan.md
+      tasks.md
   apps/
     web/
     api/
@@ -59,6 +69,7 @@ statecue/
 - `docs/deployment/gcp-predeploy-plan.md`: historical approval-gated GCP planning notes.
 - `docs/deployment/gcp-staging.md`: public-safe GCP staging posture, cost posture, and verification notes.
 - `docs/deployment/public-staging.md`: public demo surface, private API posture, and reviewer path.
+- `docs/source-materials/README.md`: guidance for local-only historical plans and public-safe rewrite rules.
 - `.firebaserc`: Firebase project alias for the staging project.
 - `firebase.json`: Firebase Hosting configuration for the built web dashboard.
 - `scripts/check-web-build.sh`: local and CI smoke check for the built Firebase Hosting web artifact.
@@ -68,6 +79,8 @@ statecue/
 - `specs/003-deterministic-cue-derivation/`: mock cue derivation and signal severity feature definition.
 - `specs/004-decision-surface-polish/`: compact cue logic reference and dashboard polish feature definition.
 - `specs/005-mock-go-api/`: local Go API feature definition.
+- `specs/006-cloud-run-readiness/`: Cloud Run readiness and deployment safety feature definition.
+- `specs/007-running-plan-agent-v1/`: running-plan adjustment agent realignment feature definition.
 - `apps/web`: current React + Vite + HeroUI v3 mock dashboard implementation.
 - `apps/api`: current local Go API for deterministic mock cue responses.
 
