@@ -29,10 +29,17 @@ for expected in \
   "Local mock mode" \
   "staging API is private by design" \
   "No live integrations" \
+  "Running plan agent" \
+  "Tomorrow's run, adjusted from yesterday's signals." \
+  "Plan demand vs readiness" \
+  "Weekly running plan" \
+  "Reduce to 35 min easy" \
+  "Decision loop preview" \
+  "Data & trust boundary" \
   "今日の状態から、進む合図を。" \
-  "Non-medical demo cue" \
-  "Mock data boundary" \
-  "Canonical state" \
+  "Non-medical demo" \
+  "Mock source" \
+  "Cue logic reference" \
   "go" \
   "light" \
   "rest" \
