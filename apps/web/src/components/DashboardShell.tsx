@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Card, Chip, Label, Meter, Tabs } from "@heroui/react";
 import {
   cueLogicReference,
@@ -10,6 +10,7 @@ import {
   type Direction,
   type SignalSummary,
 } from "../data/statecue";
+import { loadCueDataFromApi, type CueData, type CueFetchResult } from "../data/statecueApi";
 
 function DirectionChip({ direction }: { direction: Direction }) {
   const copy = directionCopy[direction];
@@ -59,9 +60,31 @@ function SignalCard({ signal }: { signal: SignalSummary }) {
 
 export function DashboardShell() {
   const [selectedDirection, setSelectedDirection] = useState<Direction>(todayCue.direction);
-  const activeCue =
-    stateCueScenarios.find((scenario) => scenario.direction === selectedDirection) ?? todayCue;
+  const [cueData, setCueData] = useState<CueData>({
+    source: "local",
+    today: todayCue,
+    scenarios: stateCueScenarios,
+  });
+  const activeCue = cueData.scenarios.find((scenario) => scenario.direction === selectedDirection) ?? cueData.today;
   const direction = directionCopy[activeCue.direction];
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    void loadCueDataFromApi(undefined, fetch, controller.signal)
+      .then((result: CueFetchResult) => {
+        setCueData(result.data);
+      })
+      .catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          return;
+        }
+      });
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -71,6 +94,9 @@ export function DashboardShell() {
             <div className="mb-3 flex flex-wrap items-center gap-2">
               <Chip color="accent" size="sm" variant="soft">
                 Mock demo
+              </Chip>
+              <Chip color={cueData.source === "api" ? "success" : "default"} size="sm" variant="tertiary">
+                {cueData.source === "api" ? "API mock" : "Local mock"}
               </Chip>
               <Chip color="default" size="sm" variant="tertiary">
                 No live integrations
@@ -103,7 +129,7 @@ export function DashboardShell() {
                 aria-label="Choose a deterministic mock scenario"
                 className="w-full flex-wrap *:min-h-10 *:flex-1 *:px-4 *:text-sm *:font-medium"
               >
-                {stateCueScenarios.map((scenario) => (
+                {cueData.scenarios.map((scenario) => (
                   <Tabs.Tab id={scenario.direction} key={scenario.direction}>
                     {directionCopy[scenario.direction].label}
                     <Tabs.Indicator />
@@ -111,7 +137,7 @@ export function DashboardShell() {
                 ))}
               </Tabs.List>
             </Tabs.ListContainer>
-            {stateCueScenarios.map((scenario) => (
+            {cueData.scenarios.map((scenario) => (
               <Tabs.Panel className="px-1 pt-3 text-sm text-muted" id={scenario.direction} key={scenario.direction}>
                 {scenario.scenarioSummary}
               </Tabs.Panel>
