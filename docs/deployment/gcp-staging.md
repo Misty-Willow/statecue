@@ -23,6 +23,8 @@ This document records the current StateCue staging deployment. It is an operatio
 - Cloud Run revision: `statecue-api-00001-w4b`
 - Cloud Run access: authenticated only
 - Cloud Run invoker: `user:runwize.app@gmail.com`
+- Firebase Hosting site: `statecue-staging`
+- Firebase Hosting URL: `https://statecue-staging.web.app`
 - Deploy service account: `statecue-deployer@statecue-staging.iam.gserviceaccount.com`
 - Cloud Run minimum instances: 0
 - Cloud Run maximum instances: 1
@@ -43,9 +45,10 @@ The staging service is configured to minimize idle cost:
 - `max-instances=1` caps accidental scale-out.
 - The API is authenticated, so anonymous public traffic receives `403`.
 - The current container image is small and stored in one Artifact Registry repository.
+- Firebase Hosting serves the mock-only web dashboard from `apps/web/dist`.
 - A JPY 1600 monthly budget alert is scoped to the staging project.
 
-This does not make staging free. Possible charges include Cloud Run request processing, container startup and shutdown time, Artifact Registry storage, Cloud Build minutes, Cloud Logging, and network egress. Keep this environment quiet unless intentionally testing it.
+This does not make staging free. Possible charges include Cloud Run request processing, container startup and shutdown time, Artifact Registry storage, Cloud Build minutes, Cloud Logging, Firebase Hosting storage and transfer beyond free allowance, and network egress. Keep this environment quiet unless intentionally testing it.
 
 Official references:
 
@@ -91,7 +94,7 @@ Run the non-mutating staging drift check:
 bash scripts/check-gcp-staging.sh
 ```
 
-This verifies the project, billing flag, budget alert, Cloud Run service URL, current image, invoker policy, deploy service account, removal of temporary broad default-compute grants, and the expected `403` response for anonymous requests.
+This verifies the project, billing flag, budget alert, Cloud Run service URL, current image, invoker policy, deploy service account, removal of temporary broad default-compute grants, the expected `403` response for anonymous API requests, and the hosted web dashboard.
 
 List the active staging service:
 
@@ -108,6 +111,15 @@ curl -i https://statecue-api-g7es36aabq-an.a.run.app/api/cue
 ```
 
 Expected result: `403 Forbidden`.
+
+Confirm the hosted web dashboard:
+
+```bash
+curl -fsSI https://statecue-staging.web.app
+curl -fsS https://statecue-staging.web.app | grep -F "StateCue"
+```
+
+Expected result: `200 OK` with the StateCue HTML shell. The hosted dashboard uses local deterministic mock data while the Cloud Run API remains authenticated.
 
 Use the authenticated proxy for manual smoke tests:
 
@@ -136,4 +148,5 @@ Expected results:
 - Add a repeatable deploy script or CI workflow only after the deploy identity is settled.
 - Decide whether the API should remain authenticated, become public, or sit behind a frontend/backend boundary.
 - Add stable HTTP health verification for authenticated staging.
+- Decide whether Firebase Hosting should remain the public demo surface or move behind a custom domain.
 - Decide whether to enable Artifact Registry vulnerability scanning.

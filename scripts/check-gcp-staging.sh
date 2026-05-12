@@ -9,6 +9,7 @@ BILLING_ACCOUNT="${BILLING_ACCOUNT:-01A659-C200D3-3FBA8E}"
 BUDGET_NAME="${BUDGET_NAME:-StateCue Staging JPY 1600 Monthly Alert}"
 EXPECTED_IMAGE="${EXPECTED_IMAGE:-asia-northeast1-docker.pkg.dev/statecue-staging/statecue/statecue-api:12cf408}"
 EXPECTED_URL="${EXPECTED_URL:-https://statecue-api-g7es36aabq-an.a.run.app}"
+EXPECTED_HOSTING_URL="${EXPECTED_HOSTING_URL:-https://statecue-staging.web.app}"
 EXPECTED_INVOKER="${EXPECTED_INVOKER:-user:runwize.app@gmail.com}"
 DEFAULT_COMPUTE_SA="${DEFAULT_COMPUTE_SA:-${PROJECT_NUMBER}-compute@developer.gserviceaccount.com}"
 DEPLOYER_SA="${DEPLOYER_SA:-statecue-deployer@statecue-staging.iam.gserviceaccount.com}"
@@ -134,8 +135,15 @@ expect_contains "deployer runtime serviceAccountUser role" "$runtime_sa_policy" 
 public_status="$(curl -sS -o /dev/null -w '%{http_code}' "${EXPECTED_URL}/api/cue")"
 expect_eq "public API status" "$public_status" "403"
 
+hosting_status="$(curl -sS -o /dev/null -w '%{http_code}' "$EXPECTED_HOSTING_URL")"
+expect_eq "Firebase Hosting status" "$hosting_status" "200"
+
+hosting_html="$(curl -fsS "$EXPECTED_HOSTING_URL" || true)"
+expect_contains "Firebase Hosting HTML" "$hosting_html" "StateCue"
+expect_contains "Firebase Hosting HTML" "$hosting_html" "StateCue gives a daily recovery direction"
+
 if (( failures > 0 )); then
   exit 1
 fi
 
-printf 'check-gcp-staging: staging drift check passed for %s/%s\n' "$PROJECT_ID" "$SERVICE_NAME"
+printf 'check-gcp-staging: staging drift check passed for %s/%s and %s\n' "$PROJECT_ID" "$SERVICE_NAME" "$EXPECTED_HOSTING_URL"

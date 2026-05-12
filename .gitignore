@@ -37,6 +37,7 @@ logs/
 *.sqlite-wal
 
 # Tooling caches
+.firebase/
 .cache/
 .turbo/
 .parcel-cache/
