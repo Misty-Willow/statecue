@@ -50,6 +50,7 @@ npm --prefix apps/web ci
 npm --prefix apps/web run test
 npm --prefix apps/web run typecheck
 npm --prefix apps/web run build
+bash scripts/check-web-build.sh
 bash scripts/check.sh
 ```
 
@@ -69,6 +70,8 @@ npx -y firebase-tools@latest deploy --only hosting --project statecue-staging
 ```
 
 Current staging URL: <https://statecue-staging.web.app>
+
+See `docs/deployment/firebase-hosting.md` for preview-channel, deploy, smoke, and rollback notes.
 
 For the API:
 
