@@ -11,6 +11,8 @@ This document records the Firebase Hosting workflow for the public StateCue stag
 - Firebase config: `.firebaserc` and `firebase.json`
 - API posture: Cloud Run remains authenticated only; the hosted web dashboard falls back to deterministic local mock data.
 
+Anonymous Cloud Run API requests returning `403` are expected. The public demo should be reviewed through the Hosting URL, not through direct API access.
+
 ## Local Build Smoke
 
 Run this before deploying Hosting:

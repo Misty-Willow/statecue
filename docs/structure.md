@@ -15,10 +15,13 @@ statecue/
     structure.md
     architecture/
       overview.md
+    adr/
+      0001-staging-api-private.md
     deployment/
       firebase-hosting.md
       gcp-predeploy-plan.md
       gcp-staging.md
+      public-staging.md
   specs/
     001-statecue-mock-direction/
       spec.md
@@ -51,9 +54,11 @@ statecue/
 - `docs/plan.md`: public foundation plan and milestone boundary.
 - `docs/structure.md`: repository map and contribution expectations.
 - `docs/architecture/overview.md`: high-level system shape and data boundary.
+- `docs/adr/0001-staging-api-private.md`: decision record for keeping the staging API authenticated-only.
 - `docs/deployment/firebase-hosting.md`: Firebase Hosting deploy, preview, smoke, and rollback runbook.
 - `docs/deployment/gcp-predeploy-plan.md`: historical approval-gated GCP planning notes.
-- `docs/deployment/gcp-staging.md`: current GCP staging inventory, cost posture, IAM review, and verification notes.
+- `docs/deployment/gcp-staging.md`: public-safe GCP staging posture, cost posture, and verification notes.
+- `docs/deployment/public-staging.md`: public demo surface, private API posture, and reviewer path.
 - `.firebaserc`: Firebase project alias for the staging project.
 - `firebase.json`: Firebase Hosting configuration for the built web dashboard.
 - `scripts/check-web-build.sh`: local and CI smoke check for the built Firebase Hosting web artifact.

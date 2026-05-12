@@ -2,17 +2,28 @@
 set -euo pipefail
 
 PROJECT_ID="${PROJECT_ID:-statecue-staging}"
-PROJECT_NUMBER="${PROJECT_NUMBER:-520798282771}"
 REGION="${REGION:-asia-northeast1}"
 SERVICE_NAME="${SERVICE_NAME:-statecue-api}"
-BILLING_ACCOUNT="${BILLING_ACCOUNT:-01A659-C200D3-3FBA8E}"
-BUDGET_NAME="${BUDGET_NAME:-StateCue Staging JPY 1600 Monthly Alert}"
-EXPECTED_IMAGE="${EXPECTED_IMAGE:-asia-northeast1-docker.pkg.dev/statecue-staging/statecue/statecue-api:12cf408}"
-EXPECTED_URL="${EXPECTED_URL:-https://statecue-api-g7es36aabq-an.a.run.app}"
 EXPECTED_HOSTING_URL="${EXPECTED_HOSTING_URL:-https://statecue-staging.web.app}"
-EXPECTED_INVOKER="${EXPECTED_INVOKER:-user:runwize.app@gmail.com}"
+
+require_env() {
+  local name="$1"
+
+  if [[ -z "${!name:-}" ]]; then
+    printf 'check-gcp-staging: set %s for staging drift checks\n' "$name" >&2
+    exit 1
+  fi
+}
+
+require_env PROJECT_NUMBER
+require_env BILLING_ACCOUNT
+require_env BUDGET_NAME
+require_env EXPECTED_IMAGE
+require_env EXPECTED_URL
+require_env EXPECTED_INVOKER
+require_env DEPLOYER_SA
+
 DEFAULT_COMPUTE_SA="${DEFAULT_COMPUTE_SA:-${PROJECT_NUMBER}-compute@developer.gserviceaccount.com}"
-DEPLOYER_SA="${DEPLOYER_SA:-statecue-deployer@statecue-staging.iam.gserviceaccount.com}"
 
 failures=0
 

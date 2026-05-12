@@ -21,9 +21,11 @@ required_files=(
   LICENSE
   README.md
   docs/architecture/overview.md
+  docs/adr/0001-staging-api-private.md
   docs/deployment/firebase-hosting.md
   docs/plan.md
   docs/structure.md
+  docs/deployment/public-staging.md
   firebase.json
   scripts/check-gcp-staging.sh
   scripts/check.sh

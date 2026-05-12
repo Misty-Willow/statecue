@@ -1,40 +1,21 @@
 # GCP Staging Runbook
 
-This document records the current StateCue staging deployment. It is an operations note for the mock API only; it does not authorize production traffic, real health data, auth expansion, wearable integrations, or medical claims.
+This document records the public-safe StateCue staging posture. It does not authorize production traffic, real health data, auth expansion, wearable integrations, medical claims, custom domains, public API access, or billing-impacting changes.
 
-## Current Inventory
+Detailed operator inventory such as billing account IDs, project numbers, personal emails, image digests, exact IAM members, and service account names must stay outside the public repository. Keep those values in a local ignored operator note or shell environment.
+
+## Current Posture
 
 - GCP project ID: `statecue-staging`
 - GCP project name: `StateCue Staging`
-- GCP project number: `520798282771`
 - Region: `asia-northeast1`
-- Billing account: `01A659-C200D3-3FBA8E`
-- Budget alert: `StateCue Staging JPY 1600 Monthly Alert`
-- Budget scope: `projects/520798282771`
-- Budget period: monthly
-- Budget thresholds: 50%, 90%, 100%
-- Artifact Registry repository: `statecue`
-- Artifact Registry location: `asia-northeast1`
-- Artifact Registry format: Docker
-- Current image tag: `asia-northeast1-docker.pkg.dev/statecue-staging/statecue/statecue-api:12cf408`
-- Current image digest: `sha256:c942ae579313f7915686f51ad0c3b2b12f6bf47ea0c890cb13429eb76b8a5c93`
-- Cloud Run service: `statecue-api`
-- Cloud Run URL: `https://statecue-api-g7es36aabq-an.a.run.app`
-- Cloud Run revision: `statecue-api-00001-w4b`
-- Cloud Run access: authenticated only
-- Cloud Run invoker: `user:runwize.app@gmail.com`
-- Firebase Hosting site: `statecue-staging`
 - Firebase Hosting URL: `https://statecue-staging.web.app`
-- Deploy service account: `statecue-deployer@statecue-staging.iam.gserviceaccount.com`
+- Cloud Run service: mock API, authenticated only
+- Anonymous API access: expected `403`
+- Web data mode: deterministic local mock fallback when API access is unavailable
 - Cloud Run minimum instances: 0
 - Cloud Run maximum instances: 1
-- Cloud Run memory: 256 MiB
-- Cloud Run CPU: 1
-
-Deleted setup attempts:
-
-- `statecue-demo-20260512`: `DELETE_REQUESTED`
-- `statecue`: `DELETE_REQUESTED`
+- Budget posture: billing is enabled with a staging budget alert
 
 ## Cost Posture
 
@@ -44,11 +25,10 @@ The staging service is configured to minimize idle cost:
 - `min-instances=0` allows the service to scale to zero.
 - `max-instances=1` caps accidental scale-out.
 - The API is authenticated, so anonymous public traffic receives `403`.
-- The current container image is small and stored in one Artifact Registry repository.
 - Firebase Hosting serves the mock-only web dashboard from `apps/web/dist`.
-- A JPY 1600 monthly budget alert is scoped to the staging project.
+- A budget alert is expected for the staging project.
 
-This does not make staging free. Possible charges include Cloud Run request processing, container startup and shutdown time, Artifact Registry storage, Cloud Build minutes, Cloud Logging, Firebase Hosting storage and transfer beyond free allowance, and network egress. Keep this environment quiet unless intentionally testing it.
+This does not make staging free. Possible charges include Cloud Run request processing, container startup and shutdown time, Artifact Registry storage, Cloud Build minutes, Cloud Logging, Firebase Hosting storage and transfer beyond free allowance, and network egress. If the demo is not being reviewed, keep Cloud Run authenticated, keep min instances at 0, keep max instances at 1, and avoid repeated smoke loops.
 
 Official references:
 
@@ -56,61 +36,47 @@ Official references:
 - Cloud Run scale to zero and pay-per-use overview: <https://docs.cloud.google.com/run/docs/overview/what-is-cloud-run>
 - Cloud Run billing settings: <https://docs.cloud.google.com/run/docs/configuring/billing-settings>
 
-## IAM Review
+## Public Access Boundary
 
-Expected project-level bindings after deployment:
+The public demo surface is Firebase Hosting. The Cloud Run API remains private by design.
 
-- `user:runwize.app@gmail.com`: `roles/owner`
-- Google-managed service agents for Artifact Registry, Cloud Build, Container Registry, Pub/Sub, and Cloud Run
-- Cloud Build default service account: `roles/cloudbuild.builds.builder`
-- `statecue-deployer@statecue-staging.iam.gserviceaccount.com`: `roles/run.developer`
+Expected public behavior:
 
-Expected Artifact Registry repository-level binding:
-
-- `statecue-deployer@statecue-staging.iam.gserviceaccount.com`: `roles/artifactregistry.writer` on `statecue`
-
-Expected runtime service account binding:
-
-- `statecue-deployer@statecue-staging.iam.gserviceaccount.com`: `roles/iam.serviceAccountUser` on `520798282771-compute@developer.gserviceaccount.com`
-
-Expected service-level binding:
-
-- `user:runwize.app@gmail.com`: `roles/run.invoker` on `statecue-api`
-
-Removed after deployment:
-
-- `520798282771-compute@developer.gserviceaccount.com`: `roles/storage.objectViewer`
-- `520798282771-compute@developer.gserviceaccount.com`: `roles/artifactregistry.writer`
-
-Those two broad project-level grants were used to get the first Cloud Build image upload working. They are not part of the steady-state staging posture. A future automated deploy slice should use a dedicated build service account with repository-scoped permissions instead of reusing the default compute service account.
-
-The current deploy service account is prepared for future manual or automated staging deploys. It is not a user login identity and has no key files in this repository.
+- `https://statecue-staging.web.app` returns the StateCue dashboard.
+- Anonymous requests to the Cloud Run API return `403`.
+- The web dashboard stays usable through deterministic local mock data.
+- No real health data, accounts, auth flows, wearable integrations, or private records are used.
 
 ## Verification Commands
 
-Run the non-mutating staging drift check:
+Run the public web build checks:
+
+```bash
+npm --prefix apps/web run build
+bash scripts/check-web-build.sh
+```
+
+Run the non-mutating staging drift check after loading local operator values into the environment:
 
 ```bash
 bash scripts/check-gcp-staging.sh
 ```
 
-This verifies the project, billing flag, budget alert, Cloud Run service URL, current image, invoker policy, deploy service account, removal of temporary broad default-compute grants, the expected `403` response for anonymous API requests, and the hosted web dashboard.
+The drift check verifies the project state, billing flag, budget alert, Cloud Run service URL, current image, invoker policy, deploy identity posture, removal of temporary broad default-compute grants, the expected `403` response for anonymous API requests, and the hosted web dashboard.
 
-List the active staging service:
-
-```bash
-gcloud run services describe statecue-api \
-  --project statecue-staging \
-  --region asia-northeast1
-```
-
-Confirm the service is not public:
+Required local environment values:
 
 ```bash
-curl -i https://statecue-api-g7es36aabq-an.a.run.app/api/cue
+PROJECT_NUMBER=...
+BILLING_ACCOUNT=...
+BUDGET_NAME=...
+EXPECTED_IMAGE=...
+EXPECTED_URL=...
+EXPECTED_INVOKER=...
+DEPLOYER_SA=...
 ```
 
-Expected result: `403 Forbidden`.
+These values are intentionally not committed to the public repo.
 
 Confirm the hosted web dashboard:
 
@@ -121,31 +87,10 @@ curl -fsS https://statecue-staging.web.app | grep -F "StateCue"
 
 Expected result: `200 OK` with the StateCue HTML shell. The hosted dashboard uses local deterministic mock data while the Cloud Run API remains authenticated.
 
-Use the authenticated proxy for manual smoke tests:
-
-```bash
-gcloud run services proxy statecue-api \
-  --project statecue-staging \
-  --region asia-northeast1 \
-  --port 18081
-```
-
-Then, in another shell:
-
-```bash
-curl -fsS http://127.0.0.1:18081/api/cue
-curl -fsS http://127.0.0.1:18081/api/scenarios
-```
-
-Expected results:
-
-- `/api/cue` returns a mock cue with `"direction":"light"` and `"dataMode":"mock"`.
-- `/api/scenarios` returns the deterministic `go`, `light`, `rest`, and `check` mock scenarios.
-
 ## Future Work
 
-- Add a dedicated deploy service account with least-privilege Artifact Registry write access.
-- Add a repeatable deploy script or CI workflow only after the deploy identity is settled.
+- Keep detailed operator inventory in ignored local notes.
+- Add a repeatable deploy script or CI workflow only after the deploy identity and secret posture are reviewed.
 - Decide whether the API should remain authenticated, become public, or sit behind a frontend/backend boundary.
 - Add stable HTTP health verification for authenticated staging.
 - Decide whether Firebase Hosting should remain the public demo surface or move behind a custom domain.
