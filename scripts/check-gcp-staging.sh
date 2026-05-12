@@ -11,6 +11,7 @@ EXPECTED_IMAGE="${EXPECTED_IMAGE:-asia-northeast1-docker.pkg.dev/statecue-stagin
 EXPECTED_URL="${EXPECTED_URL:-https://statecue-api-g7es36aabq-an.a.run.app}"
 EXPECTED_INVOKER="${EXPECTED_INVOKER:-user:runwize.app@gmail.com}"
 DEFAULT_COMPUTE_SA="${DEFAULT_COMPUTE_SA:-${PROJECT_NUMBER}-compute@developer.gserviceaccount.com}"
+DEPLOYER_SA="${DEPLOYER_SA:-statecue-deployer@statecue-staging.iam.gserviceaccount.com}"
 
 failures=0
 
@@ -105,6 +106,30 @@ temporary_grants="$(gcloud projects get-iam-policy "$PROJECT_ID" \
   --filter="bindings.members:serviceAccount:${DEFAULT_COMPUTE_SA} AND (bindings.role:roles/storage.objectViewer OR bindings.role:roles/artifactregistry.writer)" \
   --format='value(bindings.role)')"
 expect_empty "temporary default compute grants" "$temporary_grants"
+
+deployer_email="$(gcloud iam service-accounts describe "$DEPLOYER_SA" \
+  --project "$PROJECT_ID" \
+  --format='value(email)' 2>/dev/null || true)"
+expect_eq "deployer service account" "$deployer_email" "$DEPLOYER_SA"
+
+deployer_project_roles="$(gcloud projects get-iam-policy "$PROJECT_ID" \
+  --flatten='bindings[].members' \
+  --filter="bindings.members:serviceAccount:${DEPLOYER_SA}" \
+  --format='value(bindings.role)' | sort)"
+expect_eq "deployer project-level roles" "$deployer_project_roles" "roles/run.developer"
+
+repo_policy="$(gcloud artifacts repositories get-iam-policy statecue \
+  --project "$PROJECT_ID" \
+  --location "$REGION" \
+  --format=json)"
+expect_contains "deployer repository writer" "$repo_policy" "$DEPLOYER_SA"
+expect_contains "deployer repository writer role" "$repo_policy" "roles/artifactregistry.writer"
+
+runtime_sa_policy="$(gcloud iam service-accounts get-iam-policy "$DEFAULT_COMPUTE_SA" \
+  --project "$PROJECT_ID" \
+  --format=json)"
+expect_contains "deployer runtime serviceAccountUser" "$runtime_sa_policy" "$DEPLOYER_SA"
+expect_contains "deployer runtime serviceAccountUser role" "$runtime_sa_policy" "roles/iam.serviceAccountUser"
 
 public_status="$(curl -sS -o /dev/null -w '%{http_code}' "${EXPECTED_URL}/api/cue")"
 expect_eq "public API status" "$public_status" "403"

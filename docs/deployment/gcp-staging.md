@@ -23,6 +23,7 @@ This document records the current StateCue staging deployment. It is an operatio
 - Cloud Run revision: `statecue-api-00001-w4b`
 - Cloud Run access: authenticated only
 - Cloud Run invoker: `user:runwize.app@gmail.com`
+- Deploy service account: `statecue-deployer@statecue-staging.iam.gserviceaccount.com`
 - Cloud Run minimum instances: 0
 - Cloud Run maximum instances: 1
 - Cloud Run memory: 256 MiB
@@ -59,6 +60,15 @@ Expected project-level bindings after deployment:
 - `user:runwize.app@gmail.com`: `roles/owner`
 - Google-managed service agents for Artifact Registry, Cloud Build, Container Registry, Pub/Sub, and Cloud Run
 - Cloud Build default service account: `roles/cloudbuild.builds.builder`
+- `statecue-deployer@statecue-staging.iam.gserviceaccount.com`: `roles/run.developer`
+
+Expected Artifact Registry repository-level binding:
+
+- `statecue-deployer@statecue-staging.iam.gserviceaccount.com`: `roles/artifactregistry.writer` on `statecue`
+
+Expected runtime service account binding:
+
+- `statecue-deployer@statecue-staging.iam.gserviceaccount.com`: `roles/iam.serviceAccountUser` on `520798282771-compute@developer.gserviceaccount.com`
 
 Expected service-level binding:
 
@@ -71,6 +81,8 @@ Removed after deployment:
 
 Those two broad project-level grants were used to get the first Cloud Build image upload working. They are not part of the steady-state staging posture. A future automated deploy slice should use a dedicated build service account with repository-scoped permissions instead of reusing the default compute service account.
 
+The current deploy service account is prepared for future manual or automated staging deploys. It is not a user login identity and has no key files in this repository.
+
 ## Verification Commands
 
 Run the non-mutating staging drift check:
@@ -79,7 +91,7 @@ Run the non-mutating staging drift check:
 bash scripts/check-gcp-staging.sh
 ```
 
-This verifies the project, billing flag, budget alert, Cloud Run service URL, current image, invoker policy, removal of temporary broad default-compute grants, and the expected `403` response for anonymous requests.
+This verifies the project, billing flag, budget alert, Cloud Run service URL, current image, invoker policy, deploy service account, removal of temporary broad default-compute grants, and the expected `403` response for anonymous requests.
 
 List the active staging service:
 
