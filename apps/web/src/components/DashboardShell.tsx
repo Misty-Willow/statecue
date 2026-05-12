@@ -67,6 +67,10 @@ export function DashboardShell() {
   });
   const activeCue = cueData.scenarios.find((scenario) => scenario.direction === selectedDirection) ?? cueData.today;
   const direction = directionCopy[activeCue.direction];
+  const dataSourceNote =
+    cueData.source === "api"
+      ? "API mock mode: deterministic mock cues are coming from the staging API."
+      : "Local mock mode: the staging API is private by design, so this public demo uses deterministic mock data.";
 
   useEffect(() => {
     const controller = new AbortController();
@@ -107,6 +111,7 @@ export function DashboardShell() {
               Daily recovery direction from sleep, load, and fatigue signals.
             </h1>
             <p className="mt-3 text-lg text-muted">今日の状態から、進む合図を。</p>
+            <p className="mt-4 max-w-2xl text-sm text-muted">{dataSourceNote}</p>
           </div>
           <div className="rounded-lg border border-border bg-surface px-4 py-3 text-sm text-muted">
             <span className="block font-medium text-foreground">{activeCue.dateLabel}</span>
