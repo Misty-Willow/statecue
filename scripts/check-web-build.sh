@@ -32,6 +32,8 @@ for expected in \
   "Running plan agent" \
   "Tomorrow's run, adjusted from yesterday's signals." \
   "Plan demand vs readiness" \
+  "Planned demand" \
+  "Current readiness" \
   "Weekly running plan" \
   "Reduce to 35 min easy" \
   "Decision loop preview" \
