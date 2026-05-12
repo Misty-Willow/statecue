@@ -16,6 +16,7 @@ statecue/
     architecture/
       overview.md
     deployment/
+      firebase-hosting.md
       gcp-predeploy-plan.md
       gcp-staging.md
   specs/
@@ -50,10 +51,12 @@ statecue/
 - `docs/plan.md`: public foundation plan and milestone boundary.
 - `docs/structure.md`: repository map and contribution expectations.
 - `docs/architecture/overview.md`: high-level system shape and data boundary.
+- `docs/deployment/firebase-hosting.md`: Firebase Hosting deploy, preview, smoke, and rollback runbook.
 - `docs/deployment/gcp-predeploy-plan.md`: historical approval-gated GCP planning notes.
 - `docs/deployment/gcp-staging.md`: current GCP staging inventory, cost posture, IAM review, and verification notes.
 - `.firebaserc`: Firebase project alias for the staging project.
 - `firebase.json`: Firebase Hosting configuration for the built web dashboard.
+- `scripts/check-web-build.sh`: local and CI smoke check for the built Firebase Hosting web artifact.
 - `scripts/check-gcp-staging.sh`: read-only drift check for the current authenticated GCP staging API.
 - `specs/001-statecue-mock-direction/`: first demo feature definition.
 - `specs/002-interactive-mock-scenarios/`: deterministic scenario switching feature definition.

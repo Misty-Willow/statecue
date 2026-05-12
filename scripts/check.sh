@@ -21,11 +21,13 @@ required_files=(
   LICENSE
   README.md
   docs/architecture/overview.md
+  docs/deployment/firebase-hosting.md
   docs/plan.md
   docs/structure.md
   firebase.json
   scripts/check-gcp-staging.sh
   scripts/check.sh
+  scripts/check-web-build.sh
   apps/web/index.html
   apps/web/package-lock.json
   apps/web/package.json

@@ -38,6 +38,10 @@ jobs:
         if: hashFiles('apps/web/package.json') != ''
         run: npm --prefix apps/web run build
 
+      - name: Smoke web build
+        if: hashFiles('apps/web/package.json') != ''
+        run: bash scripts/check-web-build.sh
+
       - name: Re-run public-safety checks
         run: bash scripts/check.sh
 
