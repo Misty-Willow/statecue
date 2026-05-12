@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Alert, Button, Card, Chip, Label, Meter, ProgressCircle, Table, Tabs } from "@heroui/react";
+import { EvilRadarChart } from "@/components/evilcharts/charts/radar-chart";
+import { type ChartConfig } from "@/components/evilcharts/ui/chart";
 import {
   cueHistory,
   cueLogicReference,
@@ -12,12 +14,27 @@ import {
   todayCue,
   weeklyRunningPlan,
   type Direction,
-  type ReadinessMetric,
   type SignalSummary,
 } from "../data/statecue";
 import { loadCueDataFromApi, type CueData, type CueFetchResult } from "../data/statecueApi";
 
 const navItems = ["Today", "Plan", "Signals", "Data", "Eval"];
+const readinessRadarConfig = {
+  planned: {
+    label: "Planned demand",
+    colors: {
+      light: ["#f59e0b", "#fbbf24"],
+      dark: ["#fbbf24", "#fde68a"],
+    },
+  },
+  readiness: {
+    label: "Current readiness",
+    colors: {
+      light: ["#10b981", "#34d399"],
+      dark: ["#34d399", "#a7f3d0"],
+    },
+  },
+} satisfies ChartConfig;
 
 function DirectionChip({ direction }: { direction: Direction }) {
   const copy = directionCopy[direction];
@@ -65,57 +82,37 @@ function SignalCard({ signal }: { signal: SignalSummary }) {
   );
 }
 
-function RadarChart({ metrics }: { metrics: ReadinessMetric[] }) {
-  const center = 92;
-  const radius = 66;
-  const toPoint = (value: number, index: number) => {
-    const angle = -Math.PI / 2 + (index / metrics.length) * Math.PI * 2;
-    const distance = (value / 100) * radius;
+type ReadinessRadarDatum = {
+  metric: string;
+  planned: number;
+  readiness: number;
+};
 
-    return {
-      x: center + Math.cos(angle) * distance,
-      y: center + Math.sin(angle) * distance,
-    };
-  };
-  const plannedPoints = metrics.map((metric, index) => toPoint(metric.planned, index));
-  const readinessPoints = metrics.map((metric, index) => toPoint(metric.readiness, index));
-  const polygon = (points: { x: number; y: number }[]) => points.map((point) => `${point.x},${point.y}`).join(" ");
-
+function ReadinessRadar({ data }: { data: ReadinessRadarDatum[] }) {
   return (
-    <div className="grid gap-4 lg:grid-cols-[220px_1fr] lg:items-center">
-      <svg aria-label="Planned demand versus current readiness radar chart" className="mx-auto h-56 w-56" viewBox="0 0 184 184">
-        {[0.35, 0.7, 1].map((scale) => (
-          <polygon
-            className="fill-none stroke-border"
-            key={scale}
-            points={polygon(metrics.map((_, index) => toPoint(scale * 100, index)))}
-            strokeWidth="1"
-          />
-        ))}
-        {metrics.map((metric, index) => {
-          const outer = toPoint(100, index);
-
-          return (
-            <g key={metric.label}>
-              <line className="stroke-border" x1={center} x2={outer.x} y1={center} y2={outer.y} />
-              <text
-                className="fill-muted text-[9px] font-medium"
-                textAnchor={outer.x < center - 6 ? "end" : outer.x > center + 6 ? "start" : "middle"}
-                x={outer.x}
-                y={outer.y}
-              >
-                {metric.label}
-              </text>
-            </g>
-          );
-        })}
-        <polygon className="fill-warning/20 stroke-warning" points={polygon(plannedPoints)} strokeWidth="2" />
-        <polygon className="fill-success/25 stroke-success" points={polygon(readinessPoints)} strokeWidth="2" />
-      </svg>
+    <div className="grid gap-4 lg:grid-cols-[minmax(260px,1fr)_0.9fr] lg:items-center">
+      <EvilRadarChart
+        activeDotVariant="default"
+        chartConfig={readinessRadarConfig}
+        chartProps={{ margin: { top: 14, right: 18, bottom: 14, left: 18 } }}
+        className="min-h-[300px] w-full p-3"
+        data={data}
+        dataKey="metric"
+        dotVariant="colored-border"
+        fillOpacity={0.26}
+        glowingRadars={["readiness"]}
+        gridType="circle"
+        isClickable
+        legendVariant="horizontal-bar"
+        polarGridProps={{ radialLines: true }}
+        radarProps={{ isAnimationActive: true, animationDuration: 850, animationEasing: "ease-out" }}
+        tooltipRoundness="lg"
+        tooltipVariant="frosted-glass"
+      />
       <div className="space-y-3">
-        {metrics.map((metric) => (
-          <div className="grid grid-cols-[72px_1fr] items-center gap-3 text-sm" key={metric.label}>
-            <span className="font-medium text-foreground">{metric.label}</span>
+        {data.map((metric) => (
+          <div className="grid grid-cols-[72px_1fr] items-center gap-3 text-sm" key={metric.metric}>
+            <span className="font-medium text-foreground">{metric.metric}</span>
             <div className="space-y-1">
               <div className="h-2 rounded-full bg-warning/20">
                 <div className="h-2 rounded-full bg-warning" style={{ width: `${metric.planned}%` }} />
@@ -150,6 +147,11 @@ export function DashboardShell() {
   const direction = directionCopy[activeCue.direction];
   const adjustment = planAdjustments[activeCue.direction];
   const readinessMetrics = readinessMetricsByDirection[activeCue.direction];
+  const readinessRadarData = readinessMetrics.map((metric) => ({
+    metric: metric.label,
+    planned: metric.planned,
+    readiness: metric.readiness,
+  }));
   const dataSourceNote =
     cueData.source === "api"
       ? "API mock mode: deterministic mock cues are coming from the staging API."
@@ -285,7 +287,7 @@ export function DashboardShell() {
                   <Card.Description>Radar-style mock comparison for tomorrow's training decision.</Card.Description>
                 </Card.Header>
                 <Card.Content>
-                  <RadarChart metrics={readinessMetrics} />
+                  <ReadinessRadar data={readinessRadarData} />
                 </Card.Content>
               </Card>
             </section>
