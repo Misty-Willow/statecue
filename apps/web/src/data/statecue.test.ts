@@ -5,7 +5,10 @@ import {
   deriveDirection,
   directionCopy,
   isDirection,
+  planAdjustments,
+  readinessMetricsByDirection,
   todayCue,
+  weeklyRunningPlan,
   type Direction,
   type StateCueInputs,
 } from "./statecue";
@@ -81,5 +84,26 @@ describe("StateCue default and logic reference", () => {
 
     expect(referencedDirections.sort()).toEqual([...expectedDirections].sort());
     expect(new Set(referencedDirections).size).toBe(expectedDirections.length);
+  });
+
+  it("keeps the mock weekly running plan ready for next-session adjustment", () => {
+    expect(weeklyRunningPlan.sessions).toHaveLength(7);
+    expect(weeklyRunningPlan.nextSessionId).toBe("thu-easy");
+    expect(weeklyRunningPlan.sessions.some((session) => session.day === "Thu" && session.label === "Easy run")).toBe(
+      true,
+    );
+  });
+
+  it("defines one plan adjustment and readiness metric set for every direction", () => {
+    expect(Object.keys(planAdjustments).sort()).toEqual([...expectedDirections].sort());
+    expect(Object.keys(readinessMetricsByDirection).sort()).toEqual([...expectedDirections].sort());
+    expect(planAdjustments.light.adjustedTitle).toContain("Reduce");
+    expect(readinessMetricsByDirection.light.map((metric) => metric.label)).toEqual([
+      "Sleep",
+      "HRV",
+      "Load",
+      "Fatigue",
+      "Fresh",
+    ]);
   });
 });
