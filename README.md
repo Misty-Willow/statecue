@@ -73,6 +73,18 @@ Current staging URL: <https://statecue-staging.web.app>
 
 See `docs/deployment/firebase-hosting.md` for preview-channel, deploy, smoke, and rollback notes.
 
+## Public Staging Behavior
+
+The public staging surface is Firebase Hosting. The Cloud Run API remains private by design, so anonymous API requests returning `403` are expected. The hosted dashboard does not require API access; it uses deterministic local mock data when the API is unavailable or unauthorized.
+
+Review path:
+
+1. Open <https://statecue-staging.web.app>.
+2. Start with the default Light cue.
+3. Switch to Check to see stale data freshness reduce clarity.
+4. Switch to Rest to see low sleep plus elevated fatigue shift the cue.
+5. Confirm the first viewport says mock/demo, non-medical, and no real health data.
+
 For the API:
 
 ```bash

@@ -20,6 +20,8 @@ playwright-report/
 .playwright-cli/
 
 # Logs and local runtime state
+ops/
+docs/deployment/*.local.md
 logs/
 *.log
 *.tmp
