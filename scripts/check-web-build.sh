@@ -26,6 +26,8 @@ bundle_text="$(cat "$DIST_DIR"/assets/*.js "$DIST_DIR"/assets/*.css 2>/dev/null 
 for expected in \
   "Mock demo" \
   "Local mock" \
+  "Local mock mode" \
+  "staging API is private by design" \
   "No live integrations" \
   "今日の状態から、進む合図を。" \
   "Non-medical demo cue" \
