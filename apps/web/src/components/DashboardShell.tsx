@@ -71,7 +71,7 @@ function SignalCard({ signal }: { signal: SignalSummary }) {
         >
           <div className="mb-2 flex items-center justify-between gap-3 text-sm">
             <Label className="font-medium text-foreground">{signal.caption}</Label>
-            <Meter.Output className="text-muted-foreground" />
+            <Meter.Output className="text-muted" />
           </div>
           <Meter.Track>
             <Meter.Fill />
@@ -123,7 +123,7 @@ function ReadinessRadar({ data }: { data: ReadinessRadarDatum[] }) {
             </div>
           </div>
         ))}
-        <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+        <div className="flex flex-wrap gap-2 text-xs text-muted">
           <span className="inline-flex items-center gap-1">
             <span className="size-2 rounded-full bg-warning" /> Planned demand
           </span>
@@ -181,14 +181,14 @@ export function DashboardShell() {
       <div className="grid min-h-screen lg:grid-cols-[248px_1fr]">
         <aside className="hidden border-r border-border bg-surface/80 px-5 py-6 lg:block">
           <div className="mb-8">
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-muted-foreground">StateCue</p>
-            <p className="mt-2 text-sm text-muted-foreground">Running plan agent</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-muted">StateCue</p>
+            <p className="mt-2 text-sm text-muted">Running plan agent</p>
           </div>
           <nav aria-label={navLabel} className="space-y-1">
             {navItems.map((item) => (
               <button
                 className={`w-full rounded-md px-3 py-2 text-left text-sm font-medium transition-colors ${
-                  item === "Today" ? "bg-background text-foreground" : "text-muted-foreground hover:bg-background/70 hover:text-foreground"
+                  item === "Today" ? "bg-background text-foreground" : "text-muted hover:bg-background/70 hover:text-foreground"
                 }`}
                 key={item}
                 type="button"
@@ -197,7 +197,7 @@ export function DashboardShell() {
               </button>
             ))}
           </nav>
-          <div className="mt-8 rounded-md border border-border bg-background/70 p-3 text-sm text-muted-foreground">
+          <div className="mt-8 rounded-md border border-border bg-background/70 p-3 text-sm text-muted">
             <span className="block font-medium text-foreground">Mock source</span>
             Fitbit / Google Health adapter planned. No live integrations in this public demo.
           </div>
@@ -221,13 +221,13 @@ export function DashboardShell() {
                 <h1 className="mt-3 text-2xl font-semibold leading-tight text-foreground sm:text-3xl">
                   Tomorrow's run, adjusted from yesterday's signals.
                 </h1>
-                <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
+                <p className="mt-2 max-w-3xl text-sm text-muted">
                   今日の状態から、進む合図を。{" "}
                   StateCue compares a weekly running plan with mock sleep, HRV, load, fatigue, and data freshness
                   before suggesting a non-medical training adjustment.
                 </p>
               </div>
-              <div className="rounded-md border border-border bg-surface px-4 py-3 text-sm text-muted-foreground">
+              <div className="rounded-md border border-border bg-surface px-4 py-3 text-sm text-muted">
                 <span className="block font-medium text-foreground">{activeCue.dateLabel}</span>
                 Non-medical demo. Mock signals only.
               </div>
@@ -259,13 +259,13 @@ export function DashboardShell() {
                       </ProgressCircle>
                       <div>
                         <p className="text-2xl font-semibold">{adjustment.score}</p>
-                        <p className="text-sm text-muted-foreground">score / {adjustment.zone}</p>
+                        <p className="text-sm text-muted">score / {adjustment.zone}</p>
                       </div>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Planned: {adjustment.plannedTitle}</p>
+                      <p className="text-sm font-medium text-muted">Planned: {adjustment.plannedTitle}</p>
                       <p className="mt-2 text-lg text-foreground">{adjustment.changeSummary}</p>
-                      <p className="mt-3 text-sm text-muted-foreground">{adjustment.agentSummary}</p>
+                      <p className="mt-3 text-sm text-muted">{adjustment.agentSummary}</p>
                     </div>
                   </div>
                   <div className="mt-6 grid gap-3 sm:grid-cols-2">
@@ -277,7 +277,7 @@ export function DashboardShell() {
                   </div>
                 </Card.Content>
                 <Card.Footer>
-                  <p className="text-sm text-muted-foreground">{adjustment.feedbackPrompt}</p>
+                  <p className="text-sm text-muted">{adjustment.feedbackPrompt}</p>
                 </Card.Footer>
               </Card>
 
@@ -359,12 +359,12 @@ export function DashboardShell() {
                       </Tabs.List>
                     </Tabs.ListContainer>
                     {cueData.scenarios.map((scenario) => (
-                      <Tabs.Panel className="px-1 pt-3 text-sm text-muted-foreground" id={scenario.direction} key={scenario.direction}>
+                      <Tabs.Panel className="px-1 pt-3 text-sm text-muted" id={scenario.direction} key={scenario.direction}>
                         {scenario.scenarioSummary}
                       </Tabs.Panel>
                     ))}
                   </Tabs>
-                  <p className="mt-4 rounded-md border border-border bg-background/70 px-4 py-3 text-sm text-muted-foreground">
+                  <p className="mt-4 rounded-md border border-border bg-background/70 px-4 py-3 text-sm text-muted">
                     {dataSourceNote}
                   </p>
                 </Card.Content>
@@ -448,7 +448,7 @@ export function DashboardShell() {
                           <h3 className="text-sm font-semibold">{item.logicLabel}</h3>
                           <DirectionChip direction={item.direction} />
                         </div>
-                        <p className="mt-3 text-sm text-muted-foreground">{item.logicSummary}</p>
+                        <p className="mt-3 text-sm text-muted">{item.logicSummary}</p>
                       </article>
                     ))}
                   </div>
@@ -460,7 +460,7 @@ export function DashboardShell() {
           <nav className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-5 border-t border-border bg-background/95 px-2 py-2 backdrop-blur lg:hidden" aria-label="Mobile navigation">
             {navItems.map((item) => (
               <Button
-                className={`min-w-0 px-1 text-xs ${item === "Today" ? "text-foreground" : "text-muted-foreground"}`}
+                className={`min-w-0 px-1 text-xs ${item === "Today" ? "text-foreground" : "text-muted"}`}
                 key={item}
                 size="sm"
                 variant={item === "Today" ? "secondary" : "ghost"}
