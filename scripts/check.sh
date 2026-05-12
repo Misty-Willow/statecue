@@ -26,6 +26,7 @@ required_files=(
   docs/plan.md
   docs/structure.md
   docs/deployment/public-staging.md
+  docs/source-materials/README.md
   firebase.json
   scripts/check-gcp-staging.sh
   scripts/check.sh
@@ -57,6 +58,9 @@ required_files=(
   specs/006-cloud-run-readiness/plan.md
   specs/006-cloud-run-readiness/spec.md
   specs/006-cloud-run-readiness/tasks.md
+  specs/007-running-plan-agent-v1/plan.md
+  specs/007-running-plan-agent-v1/spec.md
+  specs/007-running-plan-agent-v1/tasks.md
   specs/001-statecue-mock-direction/plan.md
   specs/001-statecue-mock-direction/spec.md
   specs/001-statecue-mock-direction/tasks.md
