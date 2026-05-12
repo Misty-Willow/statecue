@@ -73,6 +73,14 @@ Those two broad project-level grants were used to get the first Cloud Build imag
 
 ## Verification Commands
 
+Run the non-mutating staging drift check:
+
+```bash
+bash scripts/check-gcp-staging.sh
+```
+
+This verifies the project, billing flag, budget alert, Cloud Run service URL, current image, invoker policy, removal of temporary broad default-compute grants, and the expected `403` response for anonymous requests.
+
 List the active staging service:
 
 ```bash

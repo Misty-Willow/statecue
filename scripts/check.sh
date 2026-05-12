@@ -21,6 +21,7 @@ required_files=(
   docs/architecture/overview.md
   docs/plan.md
   docs/structure.md
+  scripts/check-gcp-staging.sh
   scripts/check.sh
   apps/web/index.html
   apps/web/package-lock.json

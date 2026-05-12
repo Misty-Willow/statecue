@@ -50,6 +50,7 @@ statecue/
 - `docs/architecture/overview.md`: high-level system shape and data boundary.
 - `docs/deployment/gcp-predeploy-plan.md`: historical approval-gated GCP planning notes.
 - `docs/deployment/gcp-staging.md`: current GCP staging inventory, cost posture, IAM review, and verification notes.
+- `scripts/check-gcp-staging.sh`: read-only drift check for the current authenticated GCP staging API.
 - `specs/001-statecue-mock-direction/`: first demo feature definition.
 - `specs/002-interactive-mock-scenarios/`: deterministic scenario switching feature definition.
 - `specs/003-deterministic-cue-derivation/`: mock cue derivation and signal severity feature definition.
